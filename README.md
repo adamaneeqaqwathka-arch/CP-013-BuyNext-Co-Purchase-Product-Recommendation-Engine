@@ -6,93 +6,148 @@
 
 ## Overview
 
-BuyNext is a product recommendation system designed to identify products that are frequently purchased together. By analysing historical transaction data, the system discovers relationships between products and generates relevant recommendations to improve the online shopping experience.
+BuyNext is a Python-based product recommendation engine that implements the **"Customers who bought this also bought"** feature for an online store.
 
-The project uses market basket analysis and association rule mining to uncover purchasing patterns and help e-commerce platforms implement product bundling and cross-selling strategies.
+The system analyses customer orders to calculate how frequently products are purchased together. It uses co-purchase counts to recommend relevant products, suggests items a customer has not purchased, and recommends overall best-selling products to customers with no purchase history.
+
+The project implements recommendation logic using fundamental programming concepts and data structures without requiring a machine-learning platform.
 
 ## Objectives
 
-- Analyse customer transaction and purchase data.
-- Identify frequently co-purchased products.
-- Discover associations between different products.
-- Generate relevant product recommendations.
-- Support cross-selling and product bundling strategies.
-- Evaluate recommendation quality using appropriate metrics.
+- Store customer orders containing multiple products.
+- Calculate co-purchase frequencies for product pairs.
+- Recommend the top three products bought most often with a selected product.
+- Recommend three products a customer has not purchased.
+- Handle new customers using overall best-selling products.
+- Explain recommendations using purchase-frequency information.
 
-## Key Features
+## Core Features
 
-- **Market Basket Analysis:** Discover relationships between products purchased in the same transaction.
-- **Association Rule Mining:** Generate product association rules using algorithms such as Apriori or FP-Growth.
-- **Product Recommendations:** Recommend related products based on a selected product or shopping basket.
-- **Rule Evaluation:** Use support, confidence, and lift to assess product associations.
-- **Data Visualisation:** Present frequent itemsets, product relationships, and recommendation results.
-- **Recommendation Interface:** Allow users to select products and view suggested complementary items.
+All five core features are compulsory.
+
+### 1. Order Management
+
+Store orders containing a customer identifier and a list of products purchased together.
+
+Example:
+
+```python
+orders = [
+    {"customer": "C001", "products": ["Laptop", "Mouse", "Keyboard"]},
+    {"customer": "C002", "products": ["Laptop", "Mouse"]},
+    {"customer": "C003", "products": ["Laptop", "Keyboard", "Monitor"]}
+]
+```
+
+### 2. Co-Purchase Counting
+
+Calculate how many orders contain each pair of products. Each product pair should be counted once per order, even if the same product appears multiple times in the raw order data.
+
+Example output:
+
+```text
+Laptop + Mouse: 2 orders
+Laptop + Keyboard: 2 orders
+Laptop + Monitor: 1 order
+```
+
+### 3. Product-Based Recommendations
+
+Given a product, display the top three products most frequently purchased alongside it, ranked by co-purchase count.
+
+Example:
+
+```text
+Customers who bought Laptop also bought:
+1. Mouse
+2. Keyboard
+3. Monitor
+```
+
+The actual ranking depends on the stored orders. If fewer than three eligible products exist, return the available recommendations.
+
+### 4. Customer-Based Recommendations
+
+Recommend three products the customer has not previously purchased, using the co-purchase relationships associated with their purchase history.
+
+The system should aggregate relevant co-purchase counts, exclude products already purchased, and rank the remaining products by recommendation score.
+
+### 5. Best-Seller Fallback
+
+For customers with no purchase history, recommend products based on overall popularity across the order dataset.
+
+Products should be ranked by the number of orders in which they appear, rather than being treated as personalised recommendations.
+
+## Optional Stretch Features
+
+These features can be implemented after all five compulsory features are complete.
+
+### Similar Customer Identification
+
+Find the customer whose purchase history most closely matches a given customer's history using shared purchases.
+
+### Recommendation Explanations
+
+Explain why a product was recommended by showing its co-purchase count.
+
+Example:
+
+```text
+Recommended: Mouse
+Reason: Bought with Laptop in 12 orders.
+```
 
 ## Technology Stack
 
 - **Language:** Python
-- **Data Processing:** Pandas, NumPy
-- **Machine Learning / Data Mining:** MLxtend, Scikit-learn
-- **Visualisation:** Matplotlib, Seaborn, Plotly
-- **Interface:** Streamlit
-- **Development Environment:** Jupyter Notebook or VS Code
+- **Core Concepts:** Dictionaries, sets, lists, loops, functions and sorting
+- **Data Storage:** Python data structures initially; JSON or SQLite can be added if required
+- **Testing:** Python `unittest` or `pytest`
 - **Version Control:** Git and GitHub
+
+No machine-learning framework or external ML platform is required for the compulsory features.
 
 ## How It Works
 
-1. **Data Collection:** Load historical retail transaction data.
-2. **Data Preprocessing:** Clean the dataset and organise transactions into product baskets.
-3. **Frequent Itemset Mining:** Identify products that commonly occur together using Apriori or FP-Growth.
-4. **Association Rule Generation:** Calculate support, confidence, and lift for discovered product relationships.
-5. **Recommendation Generation:** Recommend products associated with a selected product or basket.
-6. **Evaluation and Visualisation:** Examine recommendation relevance and display insights through charts or a dashboard.
-
-## Evaluation Metrics
-
-- **Support:** How frequently a product combination appears in the dataset.
-- **Confidence:** How often a recommended product appears when the selected product or itemset occurs.
-- **Lift:** How strongly two products are associated compared with their independent occurrence.
-- **Precision@K:** The proportion of relevant products among the top K recommendations.
-- **Recall@K:** The proportion of relevant products recovered among the top K recommendations.
-
-## Example Use Case
-
-Suppose transaction data shows that customers who purchase a laptop frequently purchase a mouse or laptop sleeve in the same order.
-
-BuyNext can use these associations to recommend a mouse or laptop sleeve when a customer views or adds a laptop to their cart.
-
-*The example illustrates the intended functionality; actual recommendations will depend on the dataset.*
+1. **Store Orders:** Record each customer's order and purchased products.
+2. **Process Transactions:** Extract unique products from each order.
+3. **Build Co-Purchase Counts:** Count each unordered product pair at most once per order.
+4. **Generate Product Recommendations:** Rank products by their co-purchase counts with the selected product.
+5. **Generate Customer Recommendations:** Aggregate co-purchase counts from the customer's purchase history and exclude previously purchased products.
+6. **Handle New Customers:** Recommend the overall best-selling products when purchase history is unavailable.
+7. **Explain Recommendations:** Optionally display the purchase relationships behind each suggestion.
 
 ## Project Structure
 
 ```text
 BuyNext/
 ├── data/
-│   └── README.md
-├── notebooks/
-│   └── market_basket_analysis.ipynb
+│   └── sample_orders.json
 ├── src/
-│   ├── preprocessing.py
+│   ├── order_manager.py
+│   ├── copurchase_engine.py
 │   ├── recommendation_engine.py
 │   └── evaluation.py
-├── app.py
+├── tests/
+│   └── test_recommendations.py
+├── main.py
 ├── requirements.txt
-├── README.md
-└── .gitignore
+├── .gitignore
+└── README.md
 ```
 
-*This is a suggested structure; files can be added as development progresses.*
+This is a suggested structure. You can simplify or modify it to suit your implementation.
 
 ## Installation and Setup
 
-### 1. Clone the repository
+### 1. Clone the Repository
 
 ```bash
 git clone <your-repository-url>
 cd BuyNext
 ```
 
-### 2. Create a virtual environment
+### 2. Create a Virtual Environment
 
 ```bash
 python -m venv .venv
@@ -110,44 +165,56 @@ Activate it on Windows PowerShell:
 .venv\Scripts\Activate.ps1
 ```
 
-### 3. Install dependencies
+### 3. Install Dependencies
+
+The core recommendation engine can run using Python's standard library, so external dependencies are optional.
+
+If your project uses only the standard library, no additional installation is required.
+
+### 4. Run the Project
 
 ```bash
-pip install pandas numpy scikit-learn mlxtend matplotlib seaborn plotly streamlit
+python main.py
 ```
 
-### 4. Run the application
+## Testing and Validation
 
-Once `app.py` has been implemented:
+The implementation should be tested against the following scenarios:
 
-```bash
-streamlit run app.py
-```
+- Orders containing two or more products.
+- Product pairs appearing across multiple orders.
+- Repeated products within a single raw order.
+- Products with fewer than three co-purchased alternatives.
+- Customers with an empty purchase history.
+- Customers who have already purchased most available products.
+- Ties between products with equal recommendation counts.
+- Empty order datasets and unknown customer or product identifiers.
 
 ## Expected Outcomes
 
-- Identification of frequently co-purchased products.
-- Generation of association rules from transaction data.
-- Product recommendations based on purchasing patterns.
-- Visual insights into customer purchasing behaviour.
-- A foundation for data-driven cross-selling and product bundling.
+- Accurate co-purchase counts for product pairs.
+- Top-three recommendations for a selected product.
+- Personalised product suggestions based on purchase history.
+- Best-seller recommendations for customers with no history.
+- Optional explanations for recommended products.
 
 ## Future Enhancements
 
-- Add collaborative filtering and hybrid recommendation techniques.
-- Incorporate product ratings and customer preferences.
-- Develop real-time recommendations for shopping carts.
-- Compare Apriori and FP-Growth performance on larger datasets.
-- Deploy the recommendation dashboard as a web application.
-- Add recommendation explanations to help users understand why products are suggested.
+- Add a Streamlit dashboard for interactive recommendations.
+- Store orders and product information in SQLite or PostgreSQL.
+- Build an API for integrating recommendations into an online store.
+- Add customer similarity analysis.
+- Add configurable recommendation rules and tie-breaking strategies.
+- Explore collaborative filtering or machine-learning methods as optional future extensions.
 
 ## Project Information
 
-**Project:** BuyNext — Co-Purchase Product Recommendation Engine  
-**Project ID:** CP-013  
-**Category:** Artificial Intelligence, Machine Learning and Data Mining  
-**Domain:** E-Commerce and Retail
+- **Name:** BuyNext
+- **Project ID:** CP-013
+- **Domain:** E-Commerce and Retail
+- **Level:** Advanced
+- **Category:** Recommendation Systems and Data Mining
 
 ---
 
-*BuyNext aims to turn transaction data into meaningful product recommendations and actionable retail insight
+BuyNext demonstrates how useful product recommendations can be generated from transaction history using efficient data structures and transparent recommendation logic, without requiring a machine-learning platform.
