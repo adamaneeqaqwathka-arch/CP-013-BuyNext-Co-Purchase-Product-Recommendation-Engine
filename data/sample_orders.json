@@ -1,0 +1,11 @@
+[
+  {"customer": "C001", "products": ["Laptop", "Mouse", "Keyboard"]},
+  {"customer": "C002", "products": ["Laptop", "Mouse"]},
+  {"customer": "C003", "products": ["Laptop", "Keyboard", "Monitor"]},
+  {"customer": "C004", "products": ["Phone", "Phone Case", "Charger"]},
+  {"customer": "C005", "products": ["Phone", "Charger", "Earbuds"]},
+  {"customer": "C006", "products": ["Laptop", "Mouse", "Laptop Bag"]},
+  {"customer": "C007", "products": ["Monitor", "Keyboard", "Mouse"]},
+  {"customer": "C008", "products": ["Phone", "Earbuds"]},
+  {"customer": "C002", "products": ["Keyboard", "Mouse", "Mouse"]}
+]
